@@ -3,6 +3,9 @@
 LiquidCrystal_I2C lcd(0x27, 20, 4);
 
 #define pinoAnalogico 13
+#define ledVermelho 12
+#define ledAmarelo 14
+#define ledVerde 27
 
 
 int modo = 1;
@@ -25,8 +28,10 @@ void setup() {
 
   // Define os pinos do sensor como entrada
   pinMode(pinoAnalogico, INPUT);
-  
-  
+  pinMode(ledVermelho,OUTPUT);    
+  pinMode(ledAmarelo,OUTPUT);
+  pinMode(ledVerde,OUTPUT);
+
   lcd.init();
   lcd.backlight();
 
@@ -68,6 +73,10 @@ void loop() {
 
     // Lê o pino analógico do sensor
   int leitura_analogica = analogRead(pinoAnalogico);
+  int flag = true;
+
+ 
+  
   
   // Apresenta a leitura analógica no monitor serial
   Serial.print("leitura do sensor: ");
@@ -79,37 +88,30 @@ void loop() {
 // Repete a leitura do sensor a cada 1 segundo
 delay(1000);
     
-    lcd.setCursor(2,0); // Coluna, Linha
+    lcd.setCursor(1,0); // Coluna, Linha
+    lcd.print("Leitura:");
     lcd.print(leitura_analogica);
     
-    lcd.setCursor(9,0);
+    lcd.setCursor(2,3);
+    lcd.print("Tempo decorrido:");
     lcd.print(segundos++);
     delay(1000);
-  }
 
-  if(modo == 3) {
-    lcd.setCursor(5, 0);
-    lcd.print("Display");
-    lcd.display();
-    delay(1000);
-    lcd.noDisplay();
-    delay(1000);
-  }
-
-  if(modo == 4) {
-    lcd.scrollDisplayLeft();
-    //lcd.scrollDisplayRight();
-    delay(400);
-  }
-
-  if(modo == 5) {
-    String texto = "ABC";
-    
-    lcd.setCursor(15, 1);
-    
-    for(int i = 0; i < texto.length(); i++) {
-      lcd.write(texto.charAt(i));
+ for (int i = -1;i<segundos;i++){
+    if(leitura_analogica<100){
+      digitalWrite(ledVerde,HIGH);
+      digitalWrite(ledAmarelo,LOW);
+      digitalWrite(ledVermelho,LOW);
+    }else if (leitura_analogica>100 && leitura_analogica<300){
+     digitalWrite(ledVerde,LOW);
+     digitalWrite(ledAmarelo,HIGH);
+     digitalWrite(ledVermelho,LOW);
+    }else{
+      digitalWrite(ledVerde,LOW);
+      digitalWrite(ledAmarelo,LOW);
+      digitalWrite(ledVermelho,HIGH);
     }
   }
-  
+
+  }
 }
