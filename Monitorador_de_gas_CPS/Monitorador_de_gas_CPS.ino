@@ -1,11 +1,11 @@
 #include <LiquidCrystal_I2C.h>
 
-LiquidCrystal_I2C lcd(0x27, 16, 2);
+LiquidCrystal_I2C lcd(0x27, 20, 4);
 
-// Definição da ligação dos pinos com o Arduino
-#define pinoAnalogico A0
-#define pinoDigital 2
-int modo = 0;
+#define pinoAnalogico 13
+
+
+int modo = 1;
 
 int segundos = 0;
 
@@ -21,15 +21,11 @@ byte smile[8] = {
 };
 
 void setup() {
-  
-  // Inicializa a comunicação serial
   Serial.begin(9600);
- 
+
   // Define os pinos do sensor como entrada
   pinMode(pinoAnalogico, INPUT);
-  pinMode(pinoDigital, INPUT);
   
-  Serial.begin(9600);
   
   lcd.init();
   lcd.backlight();
@@ -38,7 +34,7 @@ void setup() {
 
   if(modo == 0) {
     lcd.setCursor(5, 0);
-    lcd.print("CPS");
+    lcd.print("C");
     //lcd.cursor();
     //lcd.blink();
   }
@@ -67,40 +63,24 @@ void setup() {
 }
 
 void loop() {
+  
+  if(modo == 1) {
 
-  // Lê o pino analógico do sensor
-int leitura_analogica = analogRead(pinoAnalogico);
-// Lê o pino digital do sensor
-int leitura_digital = digitalRead(pinoDigital);
+    // Lê o pino analógico do sensor
+  int leitura_analogica = analogRead(pinoAnalogico);
+  
+  // Apresenta a leitura analógica no monitor serial
+  Serial.print("leitura do sensor: ");
+  Serial.println(leitura_analogica);
  
-// Apresenta a leitura analógica no monitor serial
-Serial.print("leitura do sensor: ");
-Serial.println(leitura_analogica);
- 
-// Verifica se existe gás tóxico presente no ambiente
-if (leitura_digital == HIGH)
-{
-Serial.println("Gás tóxico detectado!");
-}
-else
-{
-Serial.println("Gás tóxico não detectado");
-}
+  // Verifica se existe gás tóxico presente no ambiente
+  
  
 // Repete a leitura do sensor a cada 1 segundo
 delay(1000);
-
-
-  
-    if (modo==0){
-    lcd.setCursor(2,0);
-    lcd.print(leitura_analogica);
-    }
-  
-  if(modo == 1) {
     
     lcd.setCursor(2,0); // Coluna, Linha
-    lcd.print("Tempo: ");
+    lcd.print(leitura_analogica);
     
     lcd.setCursor(9,0);
     lcd.print(segundos++);
@@ -133,5 +113,3 @@ delay(1000);
   }
   
 }
-
-
