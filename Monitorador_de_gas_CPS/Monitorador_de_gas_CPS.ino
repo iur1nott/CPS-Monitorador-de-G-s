@@ -86,23 +86,23 @@ void loop() {
   
  
 // Repete a leitura do sensor a cada 1 segundo
-delay(1000);
-    
-    lcd.setCursor(1,0); // Coluna, Linha
+
+    lcd.clear();
+    lcd.setCursor(0,0); // Coluna, Linha
     lcd.print("Leitura:");
     lcd.print(leitura_analogica);
     
-    lcd.setCursor(2,3);
+    lcd.setCursor(0,3);
     lcd.print("Tempo decorrido:");
     lcd.print(segundos++);
     delay(1000);
 
- for (int i = -1;i<segundos;i++){
+ 
     if(leitura_analogica<100){
       digitalWrite(ledVerde,HIGH);
       digitalWrite(ledAmarelo,LOW);
       digitalWrite(ledVermelho,LOW);
-    }else if (leitura_analogica>100 && leitura_analogica<300){
+    }else if (leitura_analogica>100 && leitura_analogica<230){
      digitalWrite(ledVerde,LOW);
      digitalWrite(ledAmarelo,HIGH);
      digitalWrite(ledVermelho,LOW);
@@ -110,7 +110,7 @@ delay(1000);
       digitalWrite(ledVerde,LOW);
       digitalWrite(ledAmarelo,LOW);
       digitalWrite(ledVermelho,HIGH);
-    }
+    
   }
 
   }
