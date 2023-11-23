@@ -24,6 +24,31 @@ int segundos = 0;
 WiFiClient espClient; // Cliente de Rede WiFi
 PubSubClient clientMqtt(espClient); // Cria uma instancia de um cliente MQTT
 
+void callback(char* topic, byte* payload, unsigned int length) {
+
+    Serial.print("Uma mensagem chegou no tópico: ");
+    Serial.println(topic);
+
+    Serial.print("Payload: ");
+    for (int i = 0; i < length; i++) {
+        Serial.print((char)payload[i]);
+    }
+
+//    if (payload[0] == '0'){
+//        Serial.println("\nDesligando luz");
+//        digitalWrite(led, LOW);
+//    }
+//
+//    if (payload[0] == '1'){
+//        Serial.println("\nLigando luz");
+//        digitalWrite(led, HIGH);
+//    }
+
+    Serial.println();
+    Serial.println(" -----------------------");
+
+}
+
 void setup() {
   Serial.begin(9600);
   WiFi.begin(ssid, password); // Configura o WiFi
@@ -67,7 +92,6 @@ void setup() {
   
   clientMqtt.publish("1yG4Lcv0/esp32", "Hello from ESP32");
   clientMqtt.subscribe("1yG4Lcv0/led");
-}
 
   // Define os pinos do sensor como entrada
   pinMode(pinoAnalogico, INPUT);
@@ -77,31 +101,6 @@ void setup() {
 
   lcd.init();
   lcd.backlight();
-}
-
-void callback(char* topic, byte* payload, unsigned int length) {
-
-    Serial.print("Uma mensagem chegou no tópico: ");
-    Serial.println(topic);
-
-    Serial.print("Payload: ");
-    for (int i = 0; i < length; i++) {
-        Serial.print((char)payload[i]);
-    }
-
-    if (payload[0] == '0'){
-        Serial.println("\nDesligando luz");
-        digitalWrite(led, LOW);
-    }
-
-    if (payload[0] == '1'){
-        Serial.println("\nLigando luz");
-        digitalWrite(led, HIGH);
-    }
-
-    Serial.println();
-    Serial.println(" -----------------------");
-
 }
 
 
