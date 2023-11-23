@@ -152,6 +152,6 @@ void loop() {
     digitalWrite(ledVermelho,HIGH);
     
   }
-  String payload = (String) res;
+  String payload = (String) leitura;
   clientMqtt.publish("1yG4Lcv0/sensor", payload.c_str());
 }
