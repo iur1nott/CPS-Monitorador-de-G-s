@@ -26,15 +26,15 @@ WiFiClient espClient; // Cliente de Rede WiFi
 PubSubClient clientMqtt(espClient); // Cria uma instancia de um cliente MQTT
 
 void callback(char* topic, byte* payload, unsigned int length) {
+    String strTopic = String(topic);
+    String strPayload = "";
+
+    for (int i = 0; i < length; i++) {
+        strPayload += (char)payload[i];
     }
 
     Serial.print("Uma mensagem chegou no tópico: ");
     Serial.println(topic);
-
-    Serial.print("Payload: ");
-    for (int i = 0; i < length; i++) {
-        Serial.print((char)payload[i]);
-    }
 
 //    if (payload[0] == '0'){
 //        Serial.println("\nDesligando luz");
