@@ -2,14 +2,14 @@
 #include <WiFi.h>
 #include <PubSubClient.h>
 
-const char* ssid = "nome_da_rede"; // Nome da rede WiFi
-const char* password = "senha_secreta"; // Senha da rede WiFi
+const char* ssid = "Iuri Galaxy S20 FE"; // Nome da rede WiFi
+const char* password = "eszk3793"; // Senha da rede WiFi
 
 /* CONFIGURAÇÕES DO MQTT*/
 const char* mqttServer = "broker.hivemq.com"; // Endereço do Broker MQTT
 const int mqttPort = 1883; // Porta TCP do Broker MQTT
-const char* mqttUser = ""; // Usuário MQTT
-const char* mqttPassword = ""; // Senha MQTT
+const char* mqttUser = "iurinott"; // Usuário MQTT
+const char* mqttPassword = "TicoTeco#"; // Senha MQTT
 
 
 LiquidCrystal_I2C lcd(0x27, 20, 4);
@@ -33,6 +33,8 @@ void callback(char* topic, byte* payload, unsigned int length) {
         strPayload += (char)payload[i];
     }
 
+    Serial.println("payload:"+strPayload);
+
     Serial.print("Uma mensagem chegou no tópico: ");
     Serial.println(topic);
 
@@ -47,15 +49,20 @@ void callback(char* topic, byte* payload, unsigned int length) {
 //    }
     if( strTopic == "1yG4Lcv0/led") {
           if(strPayload == "1") {
-              digitalWrite(ledVerde,HIGH);
-              digitalWrite(ledAmarelo,HIGH);
-              digitalWrite(ledVermelho,HIGH);
-              Serial.println("Luz ligada!");
-          } else {
               digitalWrite(ledVerde,LOW);
               digitalWrite(ledAmarelo,LOW);
+              digitalWrite(ledVermelho,HIGH);
+              Serial.println("Luz Vermelha!");
+          } else if (strPayload == "0") {
+              digitalWrite(ledVerde,LOW);
+              digitalWrite(ledAmarelo,HIGH);
               digitalWrite(ledVermelho,LOW);
-              Serial.println("Luz desligada!");
+              Serial.println("Luz Amarela!");
+          }else {
+            digitalWrite(ledVerde,HIGH);
+              digitalWrite(ledAmarelo,LOW);
+              digitalWrite(ledVermelho,LOW);
+              Serial.println("Luz Verde!");
           }
     }
     Serial.println();
@@ -151,25 +158,6 @@ void loop() {
   lcd.print(segundos++);
   delay(1000);
 
- 
-  if(leitura<100){
-    digitalWrite(ledVerde,HIGH);
-    digitalWrite(ledAmarelo,LOW);
-    digitalWrite(ledVermelho,LOW);
-  } else if (leitura>100 && leitura<230){
-   digitalWrite(ledVerde,LOW);
-   digitalWrite(ledAmarelo,HIGH);
-   digitalWrite(ledVermelho,LOW);
-  } else{
-    digitalWrite(ledVerde,LOW);
-    digitalWrite(ledAmarelo,LOW);
-    digitalWrite(ledVermelho,HIGH);
-     tone(buzzer, 1000); // Send 1KHz sound signal...
-  delay(1000);        // ...for 1 sec
-  noTone(buzzer);     // Stop sound...
-  delay(1000); 
-    
-  }
   String payload = (String) leitura;
   clientMqtt.publish("1yG4Lcv0/sensor", payload.c_str());
 }
