@@ -14,7 +14,7 @@ const char* mqttPassword = ""; // Senha MQTT
 
 LiquidCrystal_I2C lcd(0x27, 20, 4);
 
-#define pinoAnalogico 13
+#define pinoAnalogico 32
 #define ledVermelho 12
 #define ledAmarelo 14
 #define ledVerde 27
