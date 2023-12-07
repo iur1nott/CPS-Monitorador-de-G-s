@@ -25,6 +25,7 @@ WiFiClient espClient; // Cliente de Rede WiFi
 PubSubClient clientMqtt(espClient); // Cria uma instancia de um cliente MQTT
 
 void callback(char* topic, byte* payload, unsigned int length) {
+    }
 
     Serial.print("Uma mensagem chegou no tópico: ");
     Serial.println(topic);
@@ -43,7 +44,19 @@ void callback(char* topic, byte* payload, unsigned int length) {
 //        Serial.println("\nLigando luz");
 //        digitalWrite(led, HIGH);
 //    }
-
+    if( strTopic == "1yG4Lcv0/led") {
+          if(strPayload == "1") {
+              digitalWrite(ledVerde,HIGH);
+              digitalWrite(ledAmarelo,HIGH);
+              digitalWrite(ledVermelho,HIGH);
+              Serial.println("Luz ligada!");
+          } else {
+              digitalWrite(ledVerde,LOW);
+              digitalWrite(ledAmarelo,LOW);
+              digitalWrite(ledVermelho,LOW);
+              Serial.println("Luz desligada!");
+          }
+    }
     Serial.println();
     Serial.println(" -----------------------");
 
