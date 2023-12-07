@@ -18,6 +18,7 @@ LiquidCrystal_I2C lcd(0x27, 20, 4);
 #define ledVermelho 12
 #define ledAmarelo 14
 #define ledVerde 27
+#define buzzer 23
 
 int segundos = 0;
 
@@ -111,7 +112,8 @@ void setup() {
   pinMode(ledVermelho,OUTPUT);    
   pinMode(ledAmarelo,OUTPUT);
   pinMode(ledVerde,OUTPUT);
-
+  pinMode(buzzer,OUTPUT);
+  
   lcd.init();
   lcd.backlight();
 }
@@ -162,6 +164,10 @@ void loop() {
     digitalWrite(ledVerde,LOW);
     digitalWrite(ledAmarelo,LOW);
     digitalWrite(ledVermelho,HIGH);
+     tone(buzzer, 1000); // Send 1KHz sound signal...
+  delay(1000);        // ...for 1 sec
+  noTone(buzzer);     // Stop sound...
+  delay(1000); 
     
   }
   String payload = (String) leitura;
