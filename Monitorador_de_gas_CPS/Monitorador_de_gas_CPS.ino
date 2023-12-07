@@ -11,6 +11,8 @@ const int mqttPort = 1883; // Porta TCP do Broker MQTT
 const char* mqttUser = "iurinott"; // Usuário MQTT
 const char* mqttPassword = "TicoTeco#"; // Senha MQTT
 
+int tempo = 0;
+int soma = 0, qtde = 0;
 
 LiquidCrystal_I2C lcd(0x27, 20, 4);
 
@@ -138,26 +140,56 @@ void loop() {
   int flag = true;
 
  
-  
+
+
   
   // Apresenta a leitura analógica no monitor serial
-  Serial.print("leitura do sensor: ");
-  Serial.println(leitura);
+  // Serial.print("leitura do sensor: ");
+  // Serial.println(leitura);
  
   
  
   // Repete a leitura do sensor a cada 1 segundo
 
-  lcd.clear();
-  lcd.setCursor(0,0); // Coluna, Linha
-  lcd.print("Leitura:");
-  lcd.print(leitura);
+  // lcd.clear();
+  // lcd.setCursor(0,0); // Coluna, Linha
+  // lcd.print("Leitura:");
+  // lcd.print(leitura);
 
-  lcd.setCursor(0,3);
-  lcd.print("Tempo decorrido:");
-  lcd.print(segundos++);
-  delay(1000);
+  // lcd.setCursor(0,3);
+  // lcd.print("Tempo decorrido:");
+  // lcd.print(segundos++);
+  // delay(100);
 
-  String payload = (String) leitura;
-  clientMqtt.publish("1yG4Lcv0/sensor", payload.c_str());
+  // String payload = (String) leitura;
+
+  soma = soma + leitura;
+  qtde++;
+  
+  int tempoAtual = millis();
+  if(tempoAtual - tempo > 1000) {
+    int media = soma / qtde;
+    String payload = (String) media;
+    clientMqtt.publish("1yG4Lcv0/sensor", payload.c_str());
+    tempo = tempoAtual;
+    soma = 0;
+    qtde = 0;
+
+    lcd.clear();
+    lcd.setCursor(0,0); // Coluna, Linha
+    lcd.print("Leitura:");
+    lcd.print(leitura);
+
+    lcd.setCursor(0,3);
+    lcd.print("Tempo decorrido:");
+    lcd.print(segundos++);
+
+    Serial.print("leitura do sensor: ");
+    Serial.println(leitura);
+
+  }
+
+  // clientMqtt.publish("1yG4Lcv0/sensor", payload.c_str());
+
+  delay(100);
 }
